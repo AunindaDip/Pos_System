@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "710035774601",
+    "project_id": "posinventory-a9f32",
+    "storage_bucket": "posinventory-a9f32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710035774601:android:45f59f35be75c24219ba58",
+        "android_client_info": {
+          "package_name": "com.symbex.pos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "710035774601-k28mffakkb2riv00v1nnpubp2glhghmj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5DZQgq_iwENVqy1-peFxIzd27RzE-3nc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "710035774601-k28mffakkb2riv00v1nnpubp2glhghmj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
