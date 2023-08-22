@@ -4,11 +4,10 @@ import 'package:get/get.dart';
 import 'package:pos/Catatgories.dart';
 import 'package:pos/Customer/CreatCustomer.dart';
 import 'package:pos/Log-In.dart';
+import 'package:pos/ProcessSales/Sales.dart';
 import 'package:pos/ViewProduct.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_storage/get_storage.dart';
-
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -17,8 +16,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
   late final List<void Function()> buttonFunctions;
   @override
   void initState() {
@@ -26,22 +23,14 @@ class _MyHomePageState extends State<MyHomePage> {
     buttonFunctions = [
       () {
         Get.to(() => const addcatagory(), transition: Transition.leftToRight);
-        print('Button 1 pressed!');
       },
-          () {
-
-      },
-          () {
+      () {},
+      () {
         Get.to(() => viewproduct(), transition: Transition.leftToRight);
-        print('Button 3 pressed!');
       },
-          () {
-            _signOut();
-
+      () {
+        _signOut();
       },
-
-
-
     ];
   }
 
@@ -52,12 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
       GetStorage().remove('user_data');
       // Navigate back to the login page
       Get.offAll(logIn());
-    } catch (e) {
-      print("Error signing out: $e");
+    } catch (e)
+    {
+
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,164 +55,120 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(
 
-
           children: [
-            SizedBox(
-              height: 20,
-            ),
-
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
               children: [
-                Container(
-                  height: 140,
-                  width: 100,
-                  decoration: const BoxDecoration(
 
-                    image: DecorationImage(
-                      image: AssetImage('lib/assets/Images/add1.jpg'),
-                      fit: BoxFit.fill//
-                      // Replace with your asset image path
-
-                    ),
-                  ),
-                  child: ElevatedButton(onPressed: ()
-                  {Get.to(() => const addcatagory(), transition: Transition.leftToRight);},
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>
-                      ( Color.fromRGBO(208, 242, 230,1)),),
-                      child: Text(
-                        "Add Catagory",
-                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)
-                        ,),
-                  )
-                  ,)
-                ,
-                SizedBox(
-                  width: 10,
-                ),
-
-
-                Container(
-                  height: 140,
-                  width: 100,
-                  decoration: BoxDecoration(
-                  ),
-                  child: ElevatedButton(onPressed: ()
-                  {
-                    Get.to(() => const addproduct(), transition: Transition.leftToRight);
-
-
-
-
+                _buildCustomButton(
+                  image: "lib/assets/Images/catagory.png",
+                  text: "Add Category",
+                  color: const Color.fromRGBO(208, 242, 230, 1),
+                  onTap: () {
+                    Get.to(() => const addcatagory(),
+                        transition: Transition.leftToRight);
+                    //...
                   },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromRGBO(242, 223, 228,1.0), // Cream color with RGB value of (164, 178, 245)
-                        ),
-                      ),
-
-
-                      child: Text("Add product",style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold
-                      ),)),
                 ),
 
-                SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  height: 140,
-                  width: 100,
-                  decoration: BoxDecoration(
-                  ),
-                  child: ElevatedButton(onPressed: ()
-                  {
-                    Get.to(() => viewproduct(), transition: Transition.leftToRight);
 
+                _buildCustomButton(
+                  image: "lib/assets/Images/add1.jpg",
+                  text: "Add Product",
+                  color: const Color.fromRGBO(242, 223, 228, 1.0),
+                  onTap: () {
+                    Get.to(() => const addproduct(),
+                        transition: Transition.leftToRight);
+                    //...
                   },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromRGBO(174, 171, 245,1.0), // Cream color with RGB value of (164, 178, 245)
-                        ),
-                      ),
-
-
-                      child: Text("View Products",style: TextStyle(color: Colors.black,
-                      fontWeight: FontWeight.bold),)),
                 ),
 
+
+                _buildCustomButton(
+                  image: "lib/assets/Images/Viewproduct.png",
+                  text: "View Products",
+                  color: const Color.fromRGBO(174, 171, 245, 1.0),
+                  onTap: () {
+                    Get.to(() => const viewproduct(),
+                        transition: Transition.leftToRight);
+                    //...
+                  },
+                ),
               ],
             ),
-
-            SizedBox(
-              height: 10,
-            ),
             Row(
-
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  height: 140,
-                  width: 100,
-                  decoration: BoxDecoration(
-                  ),
-                  child: ElevatedButton(onPressed: ()
-                  {
+                _buildCustomButton(
+                  image: "lib/assets/Images/Addcustomer.png",
+                  text: "Add Customer",
+                  color: const Color.fromRGBO(162, 242, 170, 1),
+                  onTap: () {
+                    Get.to(() => const creatCustomer(),
+                        transition: Transition.leftToRight);
+                    //...
+                  },
+                ),
+                _buildCustomButton(
+                  image: "lib/assets/Images/Sales.png",
+                  text: "Sales",
+                  color: const Color.fromRGBO(240, 200, 127, 1.0),
+                  onTap: () {
+
+                    Get.to(() =>  sales(),
+                        transition: Transition.leftToRight);
+
+                    //...
+                  },
+                ),
+                _buildCustomButton(
+                  image: "lib/assets/Images/Signout.png",
+                  text: "Sign Out",
+                  color: const Color.fromRGBO(212, 119, 181, 1.0),
+                  onTap: () {
                     _signOut();
-
                   },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromRGBO(174, 171, 245,1.0), // Cream color with RGB value of (164, 178, 245)
-                        ),
-                      ),
-
-
-                      child: Text("Sign Out",style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.bold),)),
                 ),
-                SizedBox(
-                  width:10 ,
-                ),
-                Container(
-                  height: 140,
-                  width: 100,
-                  decoration: BoxDecoration(
-                  ),
-                  child: ElevatedButton(onPressed: ()
-                  {
-                    Get.to(() => const creatCustomer(), transition: Transition.leftToRight);
-
-                  },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromRGBO(195, 250, 245,1.0), // Cream color with RGB value of (164, 178, 245)
-                        ),
-                      ),
-
-
-                      child: const Text("Create Customer",style: TextStyle(color: Colors.black,
-                          fontWeight: FontWeight.bold),)),
-                ),
-
-
-
-
-
               ],
             ),
-
-
-
           ],
         ));
   }
-
-
-
-
 }
-
+Widget _buildCustomButton({
+  required String image,
+  required String text,
+  required Color color,
+  required void Function() onTap,
+}) {
+  return Expanded(
+    child: GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: Container(
+          height: 140,
+          width: 120,
+          decoration: BoxDecoration(color: color),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Image.asset(
+                image,
+                height: 60,
+                width: 60,
+                fit: BoxFit.contain,
+              ),
+              Text(
+                text,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
 

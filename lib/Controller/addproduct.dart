@@ -7,6 +7,9 @@ class addproductcontroller extends GetxController
   RxString selectedpdf='Upload Catalog'.obs;
   RxBool addproductbool=false.obs;
   RxBool addcustomer=false.obs;
+  RxString CustomerName=''.obs;
+
+
 
 
 

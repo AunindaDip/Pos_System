@@ -11,10 +11,10 @@ class logIn extends StatefulWidget {
   const logIn({Key? key}) : super(key: key);
 
   @override
-  __logInState createState() => __logInState();
+  _logInState createState() => _logInState();
 }
 
-class __logInState extends State<logIn> {
+class _logInState extends State<logIn> {
   late String _email, _password;
   final storage = GetStorage();
 
@@ -104,7 +104,6 @@ class __logInState extends State<logIn> {
                             textColor: Colors.white,
                             fontSize: 16.0);
                         Navigator.of(context).pop();
-                        print(e.toString());
                       }
                     } else if (_email.isEmpty || _password.isEmpty) {
                       Fluttertoast.showToast(
@@ -132,7 +131,6 @@ class __logInState extends State<logIn> {
     };
 
     storage.write('user_data', userData);
-    print(storage.toString());
   }
 }
 

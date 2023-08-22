@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:pos/Addproduct.dart';
 import 'package:get/get.dart';
-import 'package:pos/Catatgories.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pos/Controller/addproduct.dart';
+import 'package:pos/Controller/cartcontroller.dart';
 import 'package:pos/HomePage.dart';
 import 'package:pos/Log-In.dart';
 import 'package:pos/firebase_options.dart';
-import 'package:pos/ViewProduct.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pos/main.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.put(addproductcontroller());
+  Get.put(CartController());
+
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

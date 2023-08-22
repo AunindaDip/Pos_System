@@ -202,6 +202,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_elegant_number_button:
+    dependency: "direct dev"
+    description:
+      name: flutter_elegant_number_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   flutter_image_compress:
     dependency: "direct dev"
     description:
@@ -331,6 +338,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1"
+  intl:
+    dependency: "direct dev"
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.18.1"
   js:
     dependency: transitive
     description:

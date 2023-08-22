@@ -17,8 +17,7 @@ class _creatCustomerState extends State<creatCustomer> {
   TextEditingController CustomerAddress = TextEditingController();
   TextEditingController CustomerPhone = TextEditingController();
 
-  final addproductcontroller addcustomercontroller =
-      Get.find<addproductcontroller>();
+  final addproductcontroller addcustomercontroller = Get.find<addproductcontroller>();
   final dbref = FirebaseDatabase.instance;
 
   @override
@@ -138,10 +137,10 @@ class _creatCustomerState extends State<creatCustomer> {
       TextEditingController customerPhone) {
     try {
       dbref.ref().child("Customer").push().set({
-        " Customer Name": customername.text.toString(),
-        "Customer Mail ": customerEmail.text.toString(),
-        "Customer Phone": customerPhone.text.toString(),
-        "Customer Address": customerAddress.text.toString(),
+        "CustomerName":customername.text.toString(),
+        "CustomerMail":customerEmail.text.toString(),
+        "CustomerPhone":customerPhone.text.toString(),
+        "CustomerAddress":customerAddress.text.toString(),
       });
 
       customername.clear();
@@ -159,7 +158,7 @@ class _creatCustomerState extends State<creatCustomer> {
     } on Exception catch (e) {
       addcustomercontroller.addproductbool.value = false;
 
-      print(e);
+
     }
   }
 }

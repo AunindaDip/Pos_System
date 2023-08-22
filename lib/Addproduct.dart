@@ -92,7 +92,7 @@ class _addproductState extends State<addproduct> {
   Future<File?> compressAndGetFile(File file) async {
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
-      file.absolute.path + '_compressed.jpg',
+      '${file.absolute.path}_compressed.jpg',
       quality: 50, // Adjust the compression quality as needed (0 to 100)
     );
 
@@ -100,8 +100,7 @@ class _addproductState extends State<addproduct> {
   }
 
   Future<String?> uploadPdf(String filename, File file) async {
-    final reference =
-        FirebaseStorage.instance.ref().child("catalog/$filename.pdf");
+    final reference = FirebaseStorage.instance.ref().child("catalog/$filename.pdf");
 
     final uploadTask = reference.putFile(file);
 
@@ -278,7 +277,7 @@ class _addproductState extends State<addproduct> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Expanded(
@@ -347,7 +346,7 @@ class _addproductState extends State<addproduct> {
                         );
 
                         Catgaoryconntroller.addproductbool.value = true;
-                        Future.delayed(Duration(seconds: 2), () {
+                        Future.delayed(const Duration(seconds: 2), () {
                           savetodatabase(
                             productname,
                             productdescription,
@@ -363,8 +362,8 @@ class _addproductState extends State<addproduct> {
                       }
                     },
                     child: Catgaoryconntroller.addproductbool.value
-                        ? Text("Save")
-                        : Text("Save")),
+                        ? const Text("Save")
+                        : const Text("Save")),
                 if (Catgaoryconntroller.addproductbool.value)
                   ModalBarrier(
                     color: Colors.black.withOpacity(0.5),
@@ -376,6 +375,8 @@ class _addproductState extends State<addproduct> {
         ),
       ),
     );
+
+
   }
 
   Widget buildImageWidget(io.File? file) {
@@ -401,6 +402,7 @@ class _addproductState extends State<addproduct> {
         ),
       ),
     );
+
   }
 
   Future<void> savetodatabase(

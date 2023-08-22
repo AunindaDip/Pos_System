@@ -61,6 +61,8 @@ dev_dependencies:
   flutter_image_compress: 1.1.2
   firebase_auth: ^4.7.1
   shared_preferences: ^2.2.0
+  intl: ^0.18.1
+  flutter_elegant_number_button: ^0.0.6
 
 
 
@@ -85,6 +87,11 @@ flutter:
     - lib/assets/Images/add_Pice.jpg
     - lib/assets/pdf/802.pdf
     - lib/assets/Images/add1.jpg
+    - lib/assets/Images/catagory.png
+    - lib/assets/Images/Viewproduct.png
+    - lib/assets/Images/Signout.png
+    - lib/assets/Images/Addcustomer.png
+    - lib/assets/Images/Sales.png
 
 
 

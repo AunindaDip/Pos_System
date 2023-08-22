@@ -75,8 +75,9 @@ class _viewproductState extends State<viewproduct> {
                                         products[index]['url'],
                                         fit: BoxFit.fill,
                                         loadingBuilder: (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
+                                          if (loadingProgress == null) {
                                             return child;
+                                          }
                                           return Center(
                                             child: CircularProgressIndicator(
                                               value: loadingProgress.expectedTotalBytes != null
@@ -166,7 +167,6 @@ class _viewproductState extends State<viewproduct> {
       }
     } else {
       // Show an error message or take appropriate action.
-      print('Storage permission not granted');
     }
   }
 
