@@ -89,12 +89,15 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
                                           ),
 
                                           ElevatedButton(onPressed: (){
-                                            final product = Product(products[index]['Name'],
+                                            final product = Product(
+                                              products[index]['Name'],
                                               double.parse(products[index]['Selling price']),
+                                              RxInt(int.parse(products[index]["Quantity"])), // Use RxInt here
+                                              RxInt(1),
                                             );
-                                            cartController.addToCart(product);
-                                            Get.to(() =>  invoicereport(),);
-                                        
+                                            cartController.addToCart(product, 1); // Assuming you want to add 1 quantity.
+                                            Get.to(() => invoicereport());
+
 
                                           }, child: Text("add "))
 
