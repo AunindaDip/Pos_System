@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 
 class Product {
-  final String name;
+  final RxString name;
   final double price;
   final RxInt quantity;
   final RxInt stock;

@@ -90,7 +90,7 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
 
                                           ElevatedButton(onPressed: (){
                                             final product = Product(
-                                              products[index]['Name'],
+                                                RxString(products[index]['Name']),
                                               double.parse(products[index]['Selling price']),
                                               RxInt(int.parse(products[index]["Quantity"])), // Use RxInt here
                                               RxInt(1),

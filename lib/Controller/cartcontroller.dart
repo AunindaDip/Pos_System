@@ -4,9 +4,12 @@ import 'package:get/get.dart';
 
 
 class CartController extends GetxController {
-  var cartItems = <Product>[].obs;
+  var cartItems = List<Product>.empty(growable: true).toList().obs;
+
 
   RxDouble discount = RxDouble(0.0); // Initialize with no discount
+  RxDouble Paidammount  = RxDouble(0.0); // Initialize with no discount
+  RxInt get length => cartItems.length.obs;
 
 
 
@@ -27,7 +30,11 @@ class CartController extends GetxController {
   }
 
   void removeFromCart(Product product) {
+
     cartItems.remove(product);
+    print('Removing product: ${product.name}');
+
+    update();
   }
 
   void clearCart() {
@@ -35,6 +42,9 @@ class CartController extends GetxController {
   }
   void setDiscount(double value) {
     discount.value = value;
+  }
+  void setPaidammount(double value) {
+    Paidammount.value = value;
   }
 
 
@@ -45,9 +55,16 @@ class CartController extends GetxController {
 
 
   double get afterdiscount {
-    double subtotal = cartItems.fold(0.0,
-            (sum, product) => sum + (product.price * product.quantity.value));
-    return subtotal - discount.value; // Convert RxDouble to double// Subtract discount from the subtotal
+
+
+    return totalAmount - discount.value; // Convert RxDouble to double// Subtract discount from the subtotal
   }
 
-}  RxDouble discount = RxDouble(0.0); // Initialize with no discount
+  double get afterpaid {
+
+    return afterdiscount - Paidammount.value; // Convert RxDouble to double// Subtract discount from the subtotal
+  }
+
+
+
+}
