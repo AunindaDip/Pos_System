@@ -183,48 +183,50 @@ class _invoicereportState extends State<invoicereport> {
 
 
 
-                      return Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text("yes"),
-                                        content: const Text(
-                                            "Are you Sure You Want To Delete This"),
-                                        titleTextStyle:
-                                        const TextStyle(fontSize: 20),
-                                        backgroundColor: Colors.white,
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(32.0))),
-                                        actions: [
-                                          TextButton(
+                      return Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text("yes"),
+                                          content: const Text(
+                                              "Are you Sure You Want To Delete This"),
+                                          titleTextStyle:
+                                          const TextStyle(fontSize: 20),
+                                          backgroundColor: Colors.white,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(32.0))),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            invoicereport()),
+                                                  );
+                                                },
+                                                child: const Text("No")),
+                                            TextButton(
                                               onPressed: () {
                                                 Navigator.pop(context);
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          invoicereport()),
-                                                );
+
+                                                cart.removeFromCart(cart.cartItems[index]);
+
+
                                               },
-                                              child: const Text("No")),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-
-                                              cart.removeFromCart(cart.cartItems[index]);
-
-
-                                            },
-                                            child: const Text("Yes"),
-                                          )
-                                        ],
-                                      );
-                                    });
+                                              child: const Text("Yes"),
+                                            )
+                                          ],
+                                        );
+                                      });
 
 
 
@@ -232,77 +234,75 @@ class _invoicereportState extends State<invoicereport> {
 
 
 
-                              },
-                              icon: Icon(Icons.delete)),
+                                },
+                                icon: Icon(Icons.delete)),
 
-                          Obx(() => Text(  cart.cartItems[index].name.toString(),style: TextStyle(
-                            fontWeight: FontWeight.bold
-                          ),)),
-
-
-                         Spacer(),
+                            Obx(() => Text(  cart.cartItems[index].name.toString(),style: const TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),)),
 
 
-                          IconButton(
-                                  icon: Icon(Icons.remove),
-                                  onPressed: () {
-                                    if (cart.cartItems[index].quantity.value >
-                                        1) {
-                                      cart.cartItems[index].quantity.value--;
-                                    }
-                                    if (cart.cartItems[index].quantity
-                                            .value ==
-                                        0) {
-                                      // If quantity is less than 1, remove the product from the list
-                                      cart.removeFromCart(
-                                          cart.cartItems[index]);
-                                    }
-                                  },
-                                ),
+                           Spacer(),
 
 
-                          Obx(() {
-                                  if (index >= 0 && index < cart.cartItems.length) {
-                                    return Text(
-                                      cart.cartItems[index].quantity.value.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    );
-                                  } else {
-                                    return Text('Invalid Index'); // Handle the case when index is out of bounds
-                                  }
-                                }),
-                           IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: () {
-                                    if (cart.cartItems[index].quantity.value <
-                                        cart.cartItems[index].stock.value) {
-                                      cart.cartItems[index].quantity.value++;
-                                    }
-                                  },
-                                ),
-
-                                Spacer(),
+                            IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () {
+                                      if (cart.cartItems[index].quantity.value >
+                                          1) {
+                                        cart.cartItems[index].quantity.value--;
+                                      }
+                                      if (cart.cartItems[index].quantity
+                                              .value ==
+                                          0) {
+                                        // If quantity is less than 1, remove the product from the list
+                                        cart.removeFromCart(
+                                            cart.cartItems[index]);
+                                      }
+                                    },
+                                  ),
 
 
-                               Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Obx(() => Text(
-                                        (cart.cartItems[index].quantity
-                                                        .value *
-                                                    cart.cartItems[index]
-                                                        .price)
-                                                .toString() +
-                                            ("0Tk"),
+                            Obx(() {
+                                    if (index >= 0 && index < cart.cartItems.length) {
+                                      return Text(
+                                        cart.cartItems[index].quantity.value.toString(),
                                         style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                      )),
-                                ),
-                        ],
+                                      );
+                                    } else {
+                                      return Text('Invalid Index'); // Handle the case when index is out of bounds
+                                    }
+                                  }),
+                             IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      if (cart.cartItems[index].quantity.value <
+                                          cart.cartItems[index].stock.value) {
+                                        cart.cartItems[index].quantity.value++;
+                                      }
+                                    },
+                                  ),
+
+                                  Spacer(),
+
+
+                                 Obx(() => Text(
+                                       (cart.cartItems[index].quantity
+                                                       .value *
+                                                   cart.cartItems[index]
+                                                       .price)
+                                               .toString() +
+                                           ("0Tk"),
+                                       style: const TextStyle(
+                                         fontSize: 15,
+                                         fontWeight: FontWeight.bold,
+                                       ),
+                                     )),
+                          ],
+                        ),
                       );
                     }),
               ),
@@ -392,7 +392,7 @@ class _invoicereportState extends State<invoicereport> {
                                 // Other decoration properties like borders, icons, etc.
                               ),
 
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
 
@@ -536,9 +536,9 @@ class _invoicereportState extends State<invoicereport> {
     }).toList();
 
     await dbref.ref().child("Sells").push().set({
-      "CustomeName": Addproduct.CustomerName.toString(),
+      "CustomerName": Addproduct.CustomerName.toString(),
       "Products": productsData,
-      "Subttotal": cart.totalAmount.toString(),
+      "Subtotal": cart.totalAmount.toString(),
       "Discount": cart.discount.toString(),
       "Quantity": cart.afterdiscount.toString(),
     });

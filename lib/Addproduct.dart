@@ -75,20 +75,47 @@ class _addproductState extends State<addproduct> {
       // Handle error if database fetch fails
     });
   }
-
   Future<void> getImage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final picker = ImagePicker();
 
-    if (image != null) {
-      final file = io.File(image.path);
-      final compressedFile = await compressAndGetFile(file);
+    try {
+      final XFile? pickedFile = await showModalBottomSheet<XFile?>(
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.pop(context, await picker.pickImage(source: ImageSource.gallery));
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Take a Photo'),
+                onTap: () async {
+                  Navigator.pop(context, await picker.pickImage(source: ImageSource.camera));
+                },
+              ),
+            ],
+          );
+        },
+      );
 
-      setState(() {
-        this.file = file;
-      });
+      if (pickedFile != null) {
+        final file = io.File(pickedFile.path);
+        final compressedFile = await compressAndGetFile(file);
+
+        setState(() {
+          this.file = compressedFile;
+        });
+      }
+    } catch (e) {
+      print('Error selecting/capturing image: $e');
     }
   }
-
   Future<File?> compressAndGetFile(File file) async {
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
