@@ -70,7 +70,7 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
                                         children: [
                                           Expanded(
                                             child:
-                                            Text("Name:" + products[index]['Name'],
+                                            Text("Name:" + products[index]['Name'].toString(),
                                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                                             ),
                                           ),
@@ -81,7 +81,7 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
                                             child: Text(
                                               "${"Price = " +
                                                   products[index]
-                                                      ['Selling price']}Tk.",
+                                                      ['Selling price'].toString()}Tk.",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 17),
@@ -92,14 +92,17 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
                                             final product = Product(
                                                 RxString(products[index]['Name']),
                                               double.parse(products[index]['Selling price']),
-                                              RxInt(int.parse(products[index]["Quantity"])), // Use RxInt here
+                                              RxInt(int.parse(products[index]["Quantity"].toString())), // Use RxInt here
                                               RxInt(1),
+                                              RxString(products[index]["Product_id"]),
                                             );
+                                            print (products[index].toString());
                                             cartController.addToCart(product, 1); // Assuming you want to add 1 quantity.
                                             Get.to(() => invoicereport());
 
 
-                                          }, child: Text("add "))
+
+                                          }, child: Text("Add "))
 
                                         ],
                                       ),

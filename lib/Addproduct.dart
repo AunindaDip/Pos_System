@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +88,7 @@ class _addproductState extends State<addproduct> {
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.photo_library),
-                title: Text('Choose from Gallery'),
+                title: const Text('Choose from Gallery'),
                 onTap: () async {
                   Navigator.pop(context, await picker.pickImage(source: ImageSource.gallery));
                 },
@@ -367,7 +368,7 @@ class _addproductState extends State<addproduct> {
                         showDialog(
                           context: context,
                           barrierDismissible: false,
-                          builder: (context) => Center(
+                          builder: (context) => const Center(
                             child: CircularProgressIndicator(),
                           ),
                         );
@@ -409,7 +410,7 @@ class _addproductState extends State<addproduct> {
   Widget buildImageWidget(io.File? file) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
+      child: SizedBox(
         height: 200,
         width: double.infinity,
         child: MaterialButton(
@@ -461,6 +462,18 @@ class _addproductState extends State<addproduct> {
         });
 
         if (url != null) {
+
+          int otp = Random().nextInt(9999);
+          int noOfOtpDigit = 4;
+          while (otp.toString().length != noOfOtpDigit)
+          {
+            otp = Random().nextInt(9999);
+          }
+          String otpString = otp.toString();
+
+
+
+
           dbref.ref().child("Product Details").push().set({
             "Name": productname.text.toString(),
             "Description": productdescription.text.toString(),
@@ -469,7 +482,8 @@ class _addproductState extends State<addproduct> {
             "Selling price": sellingprice.text.toString(),
             "Quantity": quantity.text.toString(),
             "url": url.toString(),
-            "pdfurl": pdfurl.toString()
+            "pdfurl": pdfurl.toString(),
+            "Product_id":otpString
           });
 
           productname.clear();
