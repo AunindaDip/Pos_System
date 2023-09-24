@@ -11,6 +11,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:open_file/open_file.dart';
+import 'package:printing/printing.dart';
+import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class invoicereport extends StatefulWidget {
   final String? customerName, customerPhone;
@@ -543,7 +548,8 @@ class _invoicereportState extends State<invoicereport> {
     int nextCounter = currentCounter + 1;
 
     // Update the counter value in the database
-    await counterRef.set(nextCounter); // Await the set operation
+
+   // Await the set operation
 
     // Update the nextCounter value in the state
     setState(() {
@@ -559,6 +565,10 @@ class _invoicereportState extends State<invoicereport> {
   Future<void> savetodatabase(String slnum) async {
 
     try {
+
+      DatabaseReference counterRef = dbref.ref().child("Sells_Counter ");
+      DatabaseEvent counterSnapshot = await counterRef.once();
+
       List<Map<String, dynamic>> productsData = [];
 
       for (var item in cart.cartItems) {
@@ -617,6 +627,22 @@ class _invoicereportState extends State<invoicereport> {
         "paidAmount": cart.Paidammount.toString(),
         "Date": _dateFormat.format(_selectedDate).toString()
       });
+
+      await counterRef.set(nextCounter);
+      final pdf = await generatePDF({
+        "CustomerName": Addproduct.CustomerName.value.toString(),
+        "Sales_Serial": slnum,
+        "Date": _dateFormat.format(_selectedDate).toString(),
+        // Add other necessary data
+      }, productsData);
+      final Uint8List pdfBytes = await pdf.save(); // Save the PDF to bytes
+      await Printing.sharePdf(
+        bytes: pdfBytes, // Pass the bytes to sharePdf
+        filename: 'invoice.pdf',
+      );
+
+
+
       generatePDF;
 
     } catch (e) {
@@ -624,8 +650,11 @@ class _invoicereportState extends State<invoicereport> {
     }
   }
 
-  Future<void> generatePDF(Map<String, dynamic> salesData, List<Map<String, dynamic>> productsData) async {
+  Future<pw.Document> generatePDF(Map<String, dynamic> salesData, List<Map<String, dynamic>> productsData) async {
     final pdf = pw.Document();
+
+
+
 
     // Add a page to the PDF
     pdf.addPage(
@@ -634,6 +663,8 @@ class _invoicereportState extends State<invoicereport> {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: <pw.Widget>[
+              pw.Text("Symbex Intrnation ",style: pw.TextStyle(fontSize: 20,fontWeight: pw.FontWeight.bold,color: PdfColors.blue800)),
+
               pw.Text('Invoice', style: pw.TextStyle(
                   fontSize: 24, fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 20),
@@ -661,9 +692,9 @@ class _invoicereportState extends State<invoicereport> {
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: <pw.Widget>[
-                  pw.Text('Subtotal: ${salesData["Subtotal"]} Tk',
+                  pw.Text("Subtotal:${cart.totalAmount}",
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text('Discount: ${salesData["Discount"]}',
+                  pw.Text('Discount: ${cart.discount}',
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 ],
               ),
@@ -683,6 +714,8 @@ class _invoicereportState extends State<invoicereport> {
         },
       ),
     );
+    return pdf;
+
   }
 
 

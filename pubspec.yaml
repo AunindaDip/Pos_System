@@ -64,7 +64,12 @@ dev_dependencies:
   intl: ^0.18.1
   flutter_elegant_number_button: ^0.0.6
   pdf: ^3.4.0
-  open_file: ^3.2.1 # Use an appropriate version
+  open_file: ^3.2.1
+  printing: ^5.7.9
+  advance_pdf_viewer: any
+
+
+  # Use an appropriate version
   # Use a version that is compatible with your Flutter project
 
 
