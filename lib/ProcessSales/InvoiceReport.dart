@@ -10,11 +10,6 @@ import 'package:pos/ProcessSales/ProductListFor_Invoice.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:open_file/open_file.dart';
-import 'package:printing/printing.dart';
-import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 class invoicereport extends StatefulWidget {
@@ -366,17 +361,32 @@ class _invoicereportState extends State<invoicereport> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Obx(
-                              () => Text(
-                                cart.totalAmount.toString().isEmpty
-                                    ? "0.00Tk."
-                                    : cart.totalAmount.toString() + "Tk.",
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )
+
+
+
+
+
+
+                        Obx(() {
+                          final totalAmount = cart.totalAmount;
+                          final formattedAmount = totalAmount.toString().isNotEmpty
+                              ? 'TK.${NumberFormat.currency(
+                            decimalDigits: 2,
+                            locale: "en-in",
+                          ).format(double.parse(cart.totalAmount.toString())).replaceAll("INR", " ")}'
+                              : '0.00TK';
+
+                          return Text(formattedAmount);
+                        }
+
+
+                        ),
+
+
+
+
+
+
                           ],
                         ),
                       ),
@@ -478,6 +488,7 @@ class _invoicereportState extends State<invoicereport> {
 
                               keyboardType:
                                   const TextInputType.numberWithOptions(
+
                                       decimal: true), // Allow decimal input
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.allow(RegExp(
@@ -485,11 +496,26 @@ class _invoicereportState extends State<invoicereport> {
                               ],
 
                               onChanged: (value) {
-/*
-*/
+
+
                                 double paid = double.tryParse(value) ?? 0.0;
 
-                                cart.setPaidammount(paid);
+
+                                // Format the parsed value as currency with "TK." prefix
+                                double paidAmount = paid ;
+
+
+                                String formattedAmount = 'TK.${NumberFormat.currency(
+                                  decimalDigits: 2,
+                                  locale: 'en-in',
+                                ).format(paidAmount )}';
+
+
+/*
+*/
+
+
+                                cart.setPaidammount(paidAmount);
 
                                 // This function is called whenever the text in the TextField changes
                               },
@@ -629,7 +655,10 @@ class _invoicereportState extends State<invoicereport> {
       });
 
       await counterRef.set(nextCounter);
+
+
       final pdf = await generatePDF({
+
         "CustomerName": Addproduct.CustomerName.value.toString(),
         "Sales_Serial": slnum,
         "Date": _dateFormat.format(_selectedDate).toString(),
@@ -656,6 +685,16 @@ class _invoicereportState extends State<invoicereport> {
 
 
 
+
+
+    // Define a custom border style for lines
+    final pw.Border customBorder =  pw.Border(
+      bottom: pw.BorderSide(color: PdfColors.black, width: 2), // Add a line at the bottom
+      top: pw.BorderSide(color: PdfColors.black, width: 2), // Add a line at the top
+      left: pw.BorderSide(color: PdfColors.black, width: 2), // Add a line on the left
+      right: pw.BorderSide(color: PdfColors.black, width: 2), // Add a line on the right
+    );
+
     // Add a page to the PDF
     pdf.addPage(
       pw.Page(
@@ -663,60 +702,143 @@ class _invoicereportState extends State<invoicereport> {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: <pw.Widget>[
-              pw.Text("Symbex Intrnation ",style: pw.TextStyle(fontSize: 20,fontWeight: pw.FontWeight.bold,color: PdfColors.blue800)),
 
-              pw.Text('Invoice', style: pw.TextStyle(
-                  fontSize: 24, fontWeight: pw.FontWeight.bold)),
+              pw.Center(
+                child:pw.Text('Invoice', style: pw.TextStyle(fontSize: 25, fontWeight: pw.FontWeight.bold)),
+
+              ),
+
               pw.SizedBox(height: 20),
+              pw.Text("Symbex International", style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, color: PdfColors.blue800)),
+              pw.Text("92 Motijheel Commercial Area, Dhaka:100", style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: PdfColors.black)),
+              pw.Text("Phone: 01951135806, 9567758, 9550828", style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: PdfColors.black)),
+              pw.Text("Email: symbex@dhaka.net", style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: PdfColors.black)),
+              pw.Text("www.symbexbd.com", style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold, color: PdfColors.black)),
+              pw.Container(
+                height: 2, // Adjust the height of the line as needed
+                color: PdfColors.black,
+                margin: pw.EdgeInsets.symmetric(vertical: 5), // Adjust the vertical margin as needed
+              ),
+
+
+
               pw.Text('Customer Name: ${salesData["CustomerName"]}'),
               pw.Text('Sales Serial: ${salesData["Sales_Serial"]}'),
               pw.Text('Date: ${salesData["Date"]}'),
               pw.SizedBox(height: 20),
-              pw.Text('Products:',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-              pw.ListView.builder(
-                itemCount: productsData.length,
-                itemBuilder: (context, index) {
-                  final product = productsData[index];
-                  return pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                    children: <pw.Widget>[
-                      pw.Text(product["name"]),
-                      pw.Text('Price: ${product["price"]} Tk'),
-                      pw.Text('Quantity: ${product["quantity"]}'),
-                    ],
-                  );
-                },
+              pw.Text('Products:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 10),
+
+
+
+
+              pw.Container(
+                child: pw.ListView.builder(
+                  itemCount: productsData.length,
+                  itemBuilder: (context, index) {
+                    final product = productsData[index];
+                    return pw.Container(
+                      padding: pw.EdgeInsets.all(8),
+                      decoration: pw.BoxDecoration(border: customBorder),
+                      child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: <pw.Widget>[
+
+
+
+                          pw.Text(product["name"]),
+                          pw.Container(
+                            width: 2, // Adjust the width of the line as needed
+                            color: PdfColors.black,
+                            height: 20, // Adjust the height of the line as needed
+                          ),
+
+
+
+                          pw.Text(
+                            'Price: TK.${NumberFormat.currency(
+                              decimalDigits: 2,
+                              locale: "en-in",
+                            ).format(double.parse(product["price"].toString())).replaceAll("INR", " ")}', // Parse the string to a double here
+                          ),
+
+                          pw.Container(
+                            width: 2, // Adjust the width of the line as needed
+                            color: PdfColors.black,
+                            height: 20, // Adjust the height of the line as needed
+                          ),
+
+                          pw.Text('Quantity: ${product["quantity"]}'),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
               pw.SizedBox(height: 20),
-              pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: <pw.Widget>[
-                  pw.Text("Subtotal:${cart.totalAmount}",
+
+                  pw.Text(
+                    'Subtotal: TK.${NumberFormat.currency(
+                      decimalDigits: 2,
+                      locale: "en-in",
+                    ).format(double.parse(cart.totalAmount.toString())).replaceAll("INR", " ")}', // Parse the string to a double here
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text('Discount: ${cart.discount}',
+
+
+
+
+                  pw.Text(
+                    'Discount: TK.${NumberFormat.currency(
+                      decimalDigits: 2,
+                      locale: "en-in",
+                    ).format(double.parse(cart.discount.toString())).replaceAll("INR", " ")}', // Parse the string to a double here
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                ],
-              ),
-              pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                children: <pw.Widget>[
-                  pw.Text('Total: ${salesData["Subtotal"]} Tk',
+
+
+
+
+                  pw.Text(
+                    'Total Amount: TK.${NumberFormat.currency(
+                      decimalDigits: 2,
+                      locale: "en-in",
+                    ).format(double.parse(cart.afterdiscount.toString())).replaceAll("INR", " ")}', // Parse the string to a double here
                       style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                  pw.Text('Due Amount: ${salesData["DueAmount"]} Tk',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                ],
-              ),
-              pw.Text('Paid Amount: ${salesData["paidAmount"]} Tk',
+
+
+
+
+
+                  pw.Text(
+                    'Paid Amount: TK.${NumberFormat.currency(
+                      decimalDigits: 2,
+                      locale: "en-in",
+                    ).format(double.parse(cart.Paidammount.toString())).replaceAll("INR", " ")}', // Parse the string to a double here
                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+
+
+
+
+                  pw.Text(
+                    'Due Amount : TK.${NumberFormat.currency(
+                      decimalDigits: 2,
+                      locale: "en-in",
+                    ).format(double.parse(cart.afterpaid.toString())).replaceAll("INR", " ")}', // Parse the string to a double here
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+
+
+
+                ],
+              ),
+
             ],
           );
         },
       ),
     );
     return pdf;
-
   }
-
 
 }

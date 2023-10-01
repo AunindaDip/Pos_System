@@ -3,6 +3,7 @@ import 'package:pos/Addproduct.dart';
 import 'package:get/get.dart';
 import 'package:pos/Catatgories.dart';
 import 'package:pos/Customer/CreatCustomer.dart';
+import 'package:pos/ListofSales.dart';
 import 'package:pos/Log-In.dart';
 import 'package:pos/ProcessSales/Sales.dart';
 import 'package:pos/ViewProduct.dart';
@@ -130,10 +131,41 @@ class _MyHomePageState extends State<MyHomePage> {
                     _signOut();
                   },
                 ),
+
+
+
               ],
             ),
+
+            Row(
+              children: [
+                _buildCustomButton(
+                  image: "lib/assets/Images/sign.png",
+                  text: "All Sales",
+                  color: const Color.fromRGBO(114, 146, 166, 1.0),
+                  onTap: () {
+                    Get.to(() =>  saleslist(),
+                        transition: Transition.leftToRight);
+
+                  },
+                ),
+
+
+
+              ],
+            )
+
+
           ],
-        ));
+
+
+
+
+
+        )
+
+
+    );
   }
 }
 Widget _buildCustomButton({
