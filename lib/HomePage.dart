@@ -23,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     buttonFunctions = [
       () {
-        Get.to(() => const addcatagory(), transition: Transition.leftToRight);
+        Get.to(() => const AddCategory(), transition: Transition.leftToRight);
       },
       () {},
       () {
@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Clear any saved user data if needed
       GetStorage().remove('user_data');
       // Navigate back to the login page
-      Get.offAll(logIn());
+      Get.to( LoginScreen());
     } catch (e)
     {
 
@@ -54,114 +54,116 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: const Center(child: Text("Point of Sale ")),
         ),
-        body: Column(
+        body: SingleChildScrollView(
+          child: Column(
 
-          children: [
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
+            children: [
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
 
-                _buildCustomButton(
-                  image: "lib/assets/Images/catagory.png",
-                  text: "Add Category",
-                  color: const Color.fromRGBO(208, 242, 230, 1),
-                  onTap: () {
-                    Get.to(() => const addcatagory(),
-                        transition: Transition.leftToRight);
-                    //...
-                  },
-                ),
-
-
-                _buildCustomButton(
-                  image: "lib/assets/Images/add1.jpg",
-                  text: "Add Product",
-                  color: const Color.fromRGBO(242, 223, 228, 1.0),
-                  onTap: () {
-                    Get.to(() => const addproduct(),
-                        transition: Transition.leftToRight);
-                    //...
-                  },
-                ),
+                  _buildCustomButton(
+                    image: "lib/assets/Images/catagory.png",
+                    text: "Add Category",
+                    color: const Color.fromRGBO(208, 242, 230, 1),
+                    onTap: () {
+                      Get.to(() => const AddCategory(),
+                          transition: Transition.leftToRight);
+                      //...
+                    },
+                  ),
 
 
-                _buildCustomButton(
-                  image: "lib/assets/Images/Viewproduct.png",
-                  text: "View Products",
-                  color: const Color.fromRGBO(174, 171, 245, 1.0),
-                  onTap: () {
-                    Get.to(() => const viewproduct(),
-                        transition: Transition.leftToRight);
-                    //...
-                  },
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildCustomButton(
-                  image: "lib/assets/Images/Addcustomer.png",
-                  text: "Add Customer",
-                  color: const Color.fromRGBO(162, 242, 170, 1),
-                  onTap: () {
-                    Get.to(() => const creatCustomer(),
-                        transition: Transition.leftToRight);
-                    //...
-                  },
-                ),
-                _buildCustomButton(
-                  image: "lib/assets/Images/Sales.png",
-                  text: "Sales",
-                  color: const Color.fromRGBO(240, 200, 127, 1.0),
-                  onTap: () {
-
-                    Get.to(() =>  sales(),
-                        transition: Transition.leftToRight);
-
-                    //...
-                  },
-                ),
-                _buildCustomButton(
-                  image: "lib/assets/Images/Signout.png",
-                  text: "Sign Out",
-                  color: const Color.fromRGBO(212, 119, 181, 1.0),
-                  onTap: () {
-                    _signOut();
-                  },
-                ),
+                  _buildCustomButton(
+                    image: "lib/assets/Images/add1.jpg",
+                    text: "Add Product",
+                    color: const Color.fromRGBO(242, 223, 228, 1.0),
+                    onTap: () {
+                      Get.to(() => const addproduct(),
+                          transition: Transition.leftToRight);
+                      //...
+                    },
+                  ),
 
 
+                  _buildCustomButton(
+                    image: "lib/assets/Images/Viewproduct.png",
+                    text: "View Products",
+                    color: const Color.fromRGBO(174, 171, 245, 1.0),
+                    onTap: () {
+                      Get.to(() => const viewproduct(),
+                          transition: Transition.leftToRight);
+                      //...
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildCustomButton(
+                    image: "lib/assets/Images/Addcustomer.png",
+                    text: "Add Customer",
+                    color: const Color.fromRGBO(162, 242, 170, 1),
+                    onTap: () {
+                      Get.to(() => const creatCustomer(),
+                          transition: Transition.leftToRight);
+                      //...
+                    },
+                  ),
+                  _buildCustomButton(
+                    image: "lib/assets/Images/Sales.png",
+                    text: "Sales",
+                    color: const Color.fromRGBO(240, 200, 127, 1.0),
+                    onTap: () {
 
-              ],
-            ),
+                      Get.to(() =>  sales(),
+                          transition: Transition.leftToRight);
 
-            Row(
-              children: [
-                _buildCustomButton(
-                  image: "lib/assets/Images/sign.png",
-                  text: "All Sales",
-                  color: const Color.fromRGBO(114, 146, 166, 1.0),
-                  onTap: () {
-                    Get.to(() =>  saleslist(),
-                        transition: Transition.leftToRight);
-
-                  },
-                ),
+                      //...
+                    },
+                  ),
+                  _buildCustomButton(
+                    image: "lib/assets/Images/Signout.png",
+                    text: "Sign Out",
+                    color: const Color.fromRGBO(212, 119, 181, 1.0),
+                    onTap: () {
+                      _signOut();
+                    },
+                  ),
 
 
 
-              ],
-            )
+                ],
+              ),
+
+              Row(
+                children: [
+                  _buildCustomButton(
+                    image: "lib/assets/Images/sign.png",
+                    text: "All Sales",
+                    color: const Color.fromRGBO(114, 146, 166, 1.0),
+                    onTap: () {
+                      Get.to(() =>  saleslist(),
+                          transition: Transition.leftToRight);
+
+                    },
+                  ),
 
 
-          ],
+
+                ],
+              )
+
+
+            ],
 
 
 
 
 
+          ),
         )
 
 

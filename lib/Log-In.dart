@@ -1,138 +1,217 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pos/HomePage.dart';
-import 'package:get_storage/get_storage.dart';
 
-
-
-
-class logIn extends StatefulWidget {
-  const logIn({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _logInState createState() => _logInState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _logInState extends State<logIn> {
-  late String _email, _password;
-  final storage = GetStorage();
-
-
+class _LoginScreenState extends State<LoginScreen> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  bool _isHidden = true;
   final auth = FirebaseAuth.instance;
+  bool isLoading = false; // Add this variable
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-        appBar: AppBar(
-          title: Text("Products"),
-        ),
-
-        body: Container(
-
-          child: Padding(
-            padding: EdgeInsets.all(30.0),
+      backgroundColor: Colors.grey[300],
+      appBar: AppBar(
+        title: Center(child: const Text("Majumdar Pharmacy")),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const Icon(
+                  Icons.whatshot,
+                  size: 70,
+                  color: Colors.blueAccent,
+                ),
+                const Text(
+                  " Welcome Back !!!",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                const Text("You Have been Missed",
+                    style: TextStyle(fontSize: 20)),
+                const SizedBox(
                   height: 30,
                 ),
-                Flexible(
-                  child: TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      hintText: "Your Email",
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12.00),
                     ),
-                    onChanged: (value) {
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: TextField(
+                        controller: emailController,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email),
+                          border: InputBorder.none,
+                          hintText: "Enter your email",
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12.00),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: TextField(
+                        obscureText: _isHidden,
+                        controller: passwordController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.password_rounded),
+                          border: InputBorder.none,
+                          hintText: "Password",
+                          suffix: InkWell(
+                            onTap: _togglePasswordView,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                _isHidden
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                isLoading
+                    ? AbsorbPointer( // This widget will absorb pointer events when isLoading is true
+                  child: CircularProgressIndicator(),
+                )
+                    : InkWell(
+                  onTap: () async {
+                    if (emailController.text.isEmpty ||
+                        passwordController.text.isEmpty) {
+                      Fluttertoast.showToast(
+                        msg: 'Please enter both email and password',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                      );
+                    } else {
                       setState(() {
-                        _email = value.trim();
+                        isLoading = true; // Show loading indicator
                       });
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 26,
-                ),
-                TextField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _password = value.trim();
-                    });
-                  },
-                ),
-                SizedBox(height: 8),
-                Text("Only Admin with Id Can Log in "),
-                SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_email.isNotEmpty && _password.isNotEmpty) {
+
                       try {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Center(child: CircularProgressIndicator());
-                            });
-
-                        final userCredential = await auth.signInWithEmailAndPassword(
-                          email: _email,
-                          password: _password,
+                        final userCredential =
+                        await auth.signInWithEmailAndPassword(
+                          email: emailController.text.toString(),
+                          password: passwordController.text.toString(),
                         );
 
-                        final uid = userCredential.user!.uid;
-                        _saveUserData(uid);
-
-                        Navigator.of(context).pop();
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyHomePage()),
-                        );
+                        if (userCredential.user != null) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (_) => MyHomePage(),
+                            ),
+                          );
+                        }
                       } on FirebaseAuthException catch (e) {
                         Fluttertoast.showToast(
-                            msg: e.message!,
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.black,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        Navigator.of(context).pop();
-                      }
-                    } else if (_email.isEmpty || _password.isEmpty) {
-                      Fluttertoast.showToast(
-                          msg: "You Have to enter Both Email and Password",
+                          msg: e.message!,
                           toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.TOP,
+                          gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
                           backgroundColor: Colors.black,
                           textColor: Colors.white,
-                          fontSize: 16.0);
+                          fontSize: 16.0,
+                        );
+                      } finally {
+                        setState(() {
+                          isLoading = false; // Hide loading indicator
+                        });
+                      }
                     }
                   },
-                  child: const Text('Log in'),
-                )
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(20.00),
+                      decoration: BoxDecoration(
+                        color: Colors.blueAccent,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Log In",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Not a Member ?'),
+                    InkWell(
+                      onTap: () {
+                        /* Get.to(const MyPhone(),
+                            transition: Transition.leftToRight);*/
+                      },
+                      child: const Text(
+                        " Sign Up Now ",
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
-  void _saveUserData(String uid) {
-    final userData = {
-      'email': _email,
-      'password': _password,
-      'uid': uid,
-    };
 
-    storage.write('user_data', userData);
+  void _togglePasswordView() {
+    setState(() {
+      _isHidden = !_isHidden;
+    });
   }
 }
-
-
-

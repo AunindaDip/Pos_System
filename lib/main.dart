@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pos/Controller/CatagoryController.dart';
+import 'package:pos/Controller/LogINController.dart';
 import 'package:pos/Controller/addproduct.dart';
 import 'package:pos/Controller/cartcontroller.dart';
 import 'package:pos/HomePage.dart';
@@ -13,6 +15,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.put(addproductcontroller());
   Get.put(CartController());
+  Get.put(logInController());
+  Get.put(catagorycontroller());
+
 
   runApp(const MyApp());
 }
@@ -27,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: isLoggedIn ? MyHomePage() : const logIn(),
+      home: isLoggedIn ? MyHomePage() : const LoginScreen(),
     );
   }
 

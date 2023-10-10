@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -651,13 +650,20 @@ class _invoicereportState extends State<invoicereport> {
         "Discount": cart.discount.value,
         "DueAmount": cart.afterpaid.toString(),
         "paidAmount": cart.Paidammount.toString(),
+        "After Discount":cart.afterdiscount.toString(),
         "Date": _dateFormat.format(_selectedDate).toString()
       });
 
       await counterRef.set(nextCounter);
 
 
-      final pdf = await generatePDF({
+
+
+
+      generatePDF;
+
+
+final pdf = await generatePDF({
 
         "CustomerName": Addproduct.CustomerName.value.toString(),
         "Sales_Serial": slnum,
@@ -671,8 +677,6 @@ class _invoicereportState extends State<invoicereport> {
       );
 
 
-
-      generatePDF;
 
     } catch (e) {
       print("An error occurred: $e");
