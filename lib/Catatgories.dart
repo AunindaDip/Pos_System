@@ -62,22 +62,28 @@ class _AddCategoryState extends State<AddCategory> {
           ),
           ElevatedButton(
             onPressed: () async {
+              if(categoryName.text.isEmpty){
+                showToast("Please enter Category Name ");
+              }
+              else{
 
-              catgorcontroller.setLoading(true);
+                catgorcontroller.setLoading(true);
 
-              await Future.delayed(Duration(seconds: 2));
+                await Future.delayed(Duration(seconds: 2));
 
 
 
-              dbref
-                  .ref()
-                  .child("Category")
-                  .push()
-                  .set({"Name": categoryName.text.toString()});
-              categoryName.clear();
+                dbref
+                    .ref()
+                    .child("Category")
+                    .push()
+                    .set({"Name": categoryName.text.toString()});
+                categoryName.clear();
 
-              catgorcontroller.setLoading(false);
-              showToast("Category added successfully!");
+                catgorcontroller.setLoading(false);
+                showToast("Category added successfully!");
+              }
+
 
 
 
@@ -94,7 +100,7 @@ class _AddCategoryState extends State<AddCategory> {
           Obx(() {
             return Visibility(
               visible: catgorcontroller.isLoading.value,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             );
@@ -140,7 +146,7 @@ class _AddCategoryState extends State<AddCategory> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text(categoryName,style: TextStyle(
+                                          Text(categoryName,style: const TextStyle(
                                             fontSize: 17,fontWeight: FontWeight.bold
                                           ),),
 
@@ -153,7 +159,7 @@ class _AddCategoryState extends State<AddCategory> {
 
                                             icon: const Icon(Icons.delete,color: Colors.blueGrey,),
 
-                                            label: Text("Edit",
+                                            label: const Text("Edit",
                                               style: TextStyle(color: Colors.blueGrey),),
                                           ),
 
@@ -258,7 +264,7 @@ class _AddCategoryState extends State<AddCategory> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () {
@@ -266,7 +272,7 @@ class _AddCategoryState extends State<AddCategory> {
                 dbref.ref().child("Category").child(categoryKey).remove();
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Delete"),
+              child: const Text("Delete"),
             ),
           ],
         );
@@ -274,7 +280,7 @@ class _AddCategoryState extends State<AddCategory> {
     );
   }
   void showToast(String message) {
-    // You can use Fluttertoast or any other method to display the toast
+    // You can use Flutter toast or any other method to display the toast
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,

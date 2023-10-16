@@ -25,7 +25,7 @@ class _creatCustomerState extends State<creatCustomer> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Creat Customer"),
+        title: const Text("Creat Customer"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -43,7 +43,7 @@ class _creatCustomerState extends State<creatCustomer> {
                   ),
                   border: OutlineInputBorder()),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
@@ -57,7 +57,7 @@ class _creatCustomerState extends State<creatCustomer> {
                   ),
                   border: OutlineInputBorder()),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
@@ -71,7 +71,7 @@ class _creatCustomerState extends State<creatCustomer> {
                   ),
                   border: OutlineInputBorder()),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
@@ -85,7 +85,7 @@ class _creatCustomerState extends State<creatCustomer> {
                   ),
                   border: OutlineInputBorder()),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
@@ -103,7 +103,7 @@ class _creatCustomerState extends State<creatCustomer> {
                     showDialog(
                       context: context,
                       barrierDismissible: false,
-                      builder: (context) => Center(
+                      builder: (context) => const Center(
                         child: CircularProgressIndicator(),
                       ),
                     );
@@ -123,7 +123,7 @@ class _creatCustomerState extends State<creatCustomer> {
                     addcustomercontroller.addcustomer.value = true;
                   }
                 },
-                child: Text("Save to Database"))
+                child: const Text("Save to Database"))
           ],
         ),
       ),

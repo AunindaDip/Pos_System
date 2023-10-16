@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io' as io;
 import 'dart:io';
 import 'dart:math';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:pos/Controller/addproduct.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:pos/HomePage.dart';
 import 'Modelclass/catagorymodel.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,16 +24,32 @@ class addproduct extends StatefulWidget {
 
 class _addproductState extends State<addproduct> {
   final addproductcontroller Catgaoryconntroller =
-      Get.find<addproductcontroller>();
+  Get.find<addproductcontroller>();
+  BuildContext? _context;
+
 
   final dbref = FirebaseDatabase.instance;
   String pdfurl = " ";
 
+
   @override
   void initState() {
-    super.initState();
-    loadcatagory();
+
+      loadcatagory();
+      initialImageFile = file; // Set the initial image file
+      _context = context;
+      super.initState();
+
+
+
+
+
+
+
+
+
   }
+
 
   List<String> categoryList = [];
   List<DropdownMenuItem<String>> dropdownItems = [];
@@ -50,15 +68,20 @@ class _addproductState extends State<addproduct> {
 
   File? file;
   String selectedPdfName = "Catalog";
+  File? initialImageFile; // Added to store the initial image file
+
+
 
   void loadcatagory() {
+    Catgaoryconntroller.Catagorylist.clear();
+
     DatabaseReference databaseRef =
-        FirebaseDatabase.instance.ref().child('Category');
+    FirebaseDatabase.instance.ref().child('Category');
 
     databaseRef.once().then((DatabaseEvent databaseEvent) {
       if (databaseEvent.snapshot.value != null) {
         Map<dynamic, dynamic>? snapshotValue =
-            databaseEvent.snapshot.value as Map<dynamic, dynamic>?;
+        databaseEvent.snapshot.value as Map<dynamic, dynamic>?;
 
         if (snapshotValue != null) {
           snapshotValue.forEach((key, value) {
@@ -128,6 +151,8 @@ class _addproductState extends State<addproduct> {
   }
 
   Future<String?> uploadPdf(String filename, File file) async {
+    showProgressDialog(context); // Show the progress dialog
+
     final reference = FirebaseStorage.instance.ref().child("catalog/$filename.pdf");
 
     final uploadTask = reference.putFile(file);
@@ -135,10 +160,10 @@ class _addproductState extends State<addproduct> {
     await uploadTask.whenComplete(() => {});
 
     var downloadlink = await reference.getDownloadURL();
+    Navigator.of(context, rootNavigator: true).pop(); // Close the progress dialog
 
     return downloadlink;
   }
-
   Future<void> pickFile() async {
     final pickedfile = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -153,8 +178,7 @@ class _addproductState extends State<addproduct> {
       setState(() {
         selectedPdfName = fileName;
         Catgaoryconntroller.selectedpdf.value = fileName;
-
-        pdfurl = downloadlink ?? ""; //
+        pdfurl = downloadlink ?? "";
       });
     }
   }
@@ -162,7 +186,23 @@ class _addproductState extends State<addproduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            clearFieldsAndNavigate();
+/*
+            Navigator.pop(context); // U
+*/
+            Get.back(); // Use Get.back() to navigate back
+
+            // Handle back button press here
+
+          },
+        ),
+
+      ),
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -179,7 +219,7 @@ class _addproductState extends State<addproduct> {
                 ),
                 Center(
                   child:
-                      buildImageWidget(file), // Use the buildImageWidget here
+                  buildImageWidget(file), // Use the buildImageWidget here
                 ),
                 const SizedBox(
                   height: 10,
@@ -193,7 +233,7 @@ class _addproductState extends State<addproduct> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.blueAccent, width: 2),
+                          BorderSide(color: Colors.blueAccent, width: 2),
                         ),
                         border: OutlineInputBorder()),
                   ),
@@ -211,7 +251,7 @@ class _addproductState extends State<addproduct> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.blueAccent, width: 2),
+                          BorderSide(color: Colors.blueAccent, width: 2),
                         ),
                         border: OutlineInputBorder()),
                   ),
@@ -227,7 +267,7 @@ class _addproductState extends State<addproduct> {
                           height: 60,
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey)),
-                          child: DropdownButton<catagorymodel>(
+                          child:DropdownButton<catagorymodel>(
                             elevation: 5,
                             isExpanded: true,
                             isDense: true,
@@ -244,7 +284,7 @@ class _addproductState extends State<addproduct> {
                             iconSize: 36,
                             items: Catgaoryconntroller.Catagorylist.map<
                                 DropdownMenuItem<catagorymodel>>(
-                              (category) {
+                                  (category) {
                                 return DropdownMenuItem<catagorymodel>(
                                   value: category,
                                   child: Text(category.Name),
@@ -274,7 +314,7 @@ class _addproductState extends State<addproduct> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.blueAccent, width: 2),
+                          BorderSide(color: Colors.blueAccent, width: 2),
                         ),
                         border: OutlineInputBorder()),
                   ),
@@ -287,7 +327,7 @@ class _addproductState extends State<addproduct> {
                     height: 60,
                     width: double.infinity,
                     decoration:
-                        BoxDecoration(border: Border.all(color: Colors.grey)),
+                    BoxDecoration(border: Border.all(color: Colors.grey)),
                     child: MaterialButton(
                       onPressed: () {
                         pickFile();
@@ -318,7 +358,7 @@ class _addproductState extends State<addproduct> {
                               hintText: "Amount",
                               labelText: "Buying price",
                               floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                              FloatingLabelBehavior.always,
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.blueAccent, width: 2),
@@ -336,7 +376,7 @@ class _addproductState extends State<addproduct> {
                               hintText: "Selling price",
                               labelText: "Amount",
                               floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                              FloatingLabelBehavior.always,
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.blueAccent, width: 2),
@@ -352,15 +392,20 @@ class _addproductState extends State<addproduct> {
                 ),
                 ElevatedButton(
                     onPressed: () async {
-                      if (productname.text.isEmpty ||
+                      if (file == null || pdfurl == " ") {
+                        Fluttertoast.showToast(
+                          msg: 'Please select an image and catalog',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                        );
+                      } else if (productname.text.isEmpty ||
                           productdescription.text.isEmpty ||
                           buyingprice.text.isEmpty ||
                           sellingprice.text.isEmpty ||
                           quantity.text.isEmpty ||
-                          selectedCategory == null ||
-                          pdfurl.isEmpty) {
+                          selectedCategory == null) {
                         Fluttertoast.showToast(
-                          msg: 'Please enter both mobile and password',
+                          msg: 'Please fill in all the required fields',
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                         );
@@ -392,11 +437,7 @@ class _addproductState extends State<addproduct> {
                     child: Catgaoryconntroller.addproductbool.value
                         ? const Text("Save")
                         : const Text("Save")),
-                if (Catgaoryconntroller.addproductbool.value)
-                  ModalBarrier(
-                    color: Colors.black.withOpacity(0.5),
-                    dismissible: false,
-                  ),
+
               ],
             ),
           ),
@@ -417,13 +458,13 @@ class _addproductState extends State<addproduct> {
           height: 100,
           child: file != null
               ? Image.file(
-                  file,
-                  fit: BoxFit.fill,
-                )
+            file,
+            fit: BoxFit.fill,
+          )
               : Image.asset(
-                  defaultImagePath,
-                  fit: BoxFit.fill,
-                ),
+            defaultImagePath,
+            fit: BoxFit.fill,
+          ),
           onPressed: () {
             getImage();
           },
@@ -433,20 +474,14 @@ class _addproductState extends State<addproduct> {
 
   }
 
-  Future<void> savetodatabase(
+ savetodatabase(
       TextEditingController productname,
       TextEditingController productdescription,
       catagorymodel selectedcategory,
       TextEditingController buyingprice,
       TextEditingController sellingprice,
       TextEditingController quantity) async {
-    if (file == null || Catgaoryconntroller.selectedpdf.value == "Catalog") {
-      Fluttertoast.showToast(
-        msg: 'helolo',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-      );
-    } else {
+
       try {
         final compressedFile = await compressAndGetFile(file!);
 
@@ -457,12 +492,11 @@ class _addproductState extends State<addproduct> {
         UploadTask task = imagefile.putFile(compressedFile!);
         TaskSnapshot snapshot = await task;
         url = await snapshot.ref.getDownloadURL();
-        setState(() {
+
           url = url;
-        });
+
 
         if (url != null) {
-
           int otp = Random().nextInt(9999);
           int noOfOtpDigit = 4;
           while (otp.toString().length != noOfOtpDigit)
@@ -470,9 +504,6 @@ class _addproductState extends State<addproduct> {
             otp = Random().nextInt(9999);
           }
           String otpString = otp.toString();
-
-
-
 
           dbref.ref().child("Product Details").push().set({
             "Name": productname.text.toString(),
@@ -483,16 +514,12 @@ class _addproductState extends State<addproduct> {
             "Quantity": quantity.text.toString(),
             "url": url.toString(),
             "pdfurl": pdfurl.toString(),
-            "Product_id":otpString
+            "Product_id": otpString
           });
 
-          productname.clear();
-          productdescription.clear();
-          buyingprice.clear();
-          sellingprice.clear();
-          quantity.clear();
-          Catgaoryconntroller.selectedpdf.value = "Upload Catalog";
 
+
+          clearFieldsAndNavigate();
           Catgaoryconntroller.addproductbool.value = false;
 
           Fluttertoast.showToast(
@@ -500,12 +527,60 @@ class _addproductState extends State<addproduct> {
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
           );
+
+
+
+
+
         }
       } on Exception catch (e) {
         Catgaoryconntroller.addproductbool.value = false;
-
         print(e);
       }
-    }
+
   }
+
+
+   clearFieldsAndNavigate()async {
+    // Clear form fields
+    productname.clear();
+    productdescription.clear();
+    selectedCategory = null;
+    buyingprice.clear();
+    sellingprice.clear();
+    quantity.clear();
+    file = null; // Set the image file to null or default state
+    pdfurl = " ";
+    Catgaoryconntroller.selectedpdf.value='Upload Catalog';// S
+/*
+    Catgaoryconntroller.Catagorylist.clear();// et the PDF URL to null or default state
+*/
+
+
+  }
+  void showProgressDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent users from dismissing the dialog by tapping outside
+      builder: (context) {
+        return Dialog(
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text("Uploading Catalog..."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
 }
+

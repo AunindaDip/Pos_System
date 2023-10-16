@@ -70,7 +70,7 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
                                         children: [
                                           Expanded(
                                             child:
-                                            Text("Name:" + products[index]['Name'].toString(),
+                                            Text("Name:${products[index]['Name']}",
                                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
                                             ),
                                           ),
@@ -79,9 +79,8 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
                                           ),
                                           Expanded(
                                             child: Text(
-                                              "${"Price = " +
-                                                  products[index]
-                                                      ['Selling price'].toString()}Tk.",
+                                              "${"Price = ${products[index]
+                                                      ['Selling price']}"}Tk.",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 17),
@@ -98,11 +97,11 @@ class _ProductListForInvoiceState extends State<ProductListForInvoice> {
                                             );
                                             print (products[index].toString());
                                             cartController.addToCart(product, 1); // Assuming you want to add 1 quantity.
-                                            Get.to(() => invoicereport());
+                                            Get.to(() => const invoicereport());
 
 
 
-                                          }, child: Text("Add "))
+                                          }, child: const Text("Add "))
 
                                         ],
                                       ),

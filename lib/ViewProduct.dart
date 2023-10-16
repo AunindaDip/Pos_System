@@ -9,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pos/test.dart';
 import 'package:intl/intl.dart';
 
-
 class viewproduct extends StatefulWidget {
   const viewproduct({super.key});
 
@@ -21,14 +20,13 @@ class _viewproductState extends State<viewproduct> {
   final ref = FirebaseDatabase.instance.ref("Product Details");
   bool _isLoading = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Products"),
+        title: const Text("Products"),
       ),
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Row(
           children: [
@@ -40,7 +38,7 @@ class _viewproductState extends State<viewproduct> {
                     List<dynamic> products = [];
                     if (snapshot.data?.snapshot.value != null) {
                       Map<dynamic, dynamic> map =
-                      snapshot.data!.snapshot.value as dynamic;
+                          snapshot.data!.snapshot.value as dynamic;
                       products = map.values.toList();
                     }
                     return ListView.builder(
@@ -50,11 +48,11 @@ class _viewproductState extends State<viewproduct> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                            height: 240,
+                            height: 150,
                             width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.black87),
+                              borderRadius: BorderRadius.circular(10),
                               boxShadow: const [
                                 BoxShadow(
                                   color: Colors.white,
@@ -65,25 +63,31 @@ class _viewproductState extends State<viewproduct> {
                             ),
                             child: Row(
                               children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    height: 200,
-                                    width:
-                                    MediaQuery.of(context).size.width * 0.4,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                SizedBox(
+                                  height: 180,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
                                       child: Image.network(
                                         products[index]['url'],
-                                        fit: BoxFit.fill,
-                                        loadingBuilder: (context, child, loadingProgress) {
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
                                           if (loadingProgress == null) {
                                             return child;
                                           }
                                           return Center(
                                             child: CircularProgressIndicator(
-                                              value: loadingProgress.expectedTotalBytes != null
-                                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
                                                   : null,
                                             ),
                                           );
@@ -92,33 +96,73 @@ class _viewproductState extends State<viewproduct> {
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(height: 10,),
-                                          Text("Name:"+products[index]['Name'],style: TextStyle(fontWeight: FontWeight.bold),),
-                                          SizedBox(height: 10,),
-                                          Text("Description:"+
-                                              products[index]['Description'],
-                                              style: TextStyle(fontWeight: FontWeight.bold)
-                                          ),
-                                          SizedBox(height: 10,),
-                                          Text("Quantity:"+products[index]['Quantity'].toString(),style: TextStyle(
-                                            fontWeight: FontWeight.bold
-                                          ),),
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              String pdfUrl = products[index]['pdfurl'].toString();
-                                              await _downloadAndViewPDF(pdfUrl);
-                                            },
-                                            child: Text("View Catalog "),
-                                          ),
-                                        ],
+                                SizedBox(
+                                    width: 10), // Add this SizedBox for spacing
+
+                                SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        products[index]['Name'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17),
                                       ),
-                                    ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "Stock:${products[index]['Quantity']}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                            color: Colors.green),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "Tk." +
+                                            products[index]['Selling price'],
+                                        style: TextStyle(
+                                          color: Colors.lightBlueAccent,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              17, // Adjust the font size as needed
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      const Text(
+                                        "Catalouge",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                        color: Colors.deepOrange)
+                                        ,
+                                      ),
+                                      IconButton(
+                                          onPressed: () async {
+                                            String pdfUrl = products[index]
+                                                    ['pdfurl']
+                                                .toString();
+                                            await _downloadAndViewPDF(pdfUrl);
+                                          },
+                                          icon: Icon(
+                                              color: Colors.deepOrange,
+
+                                              Icons.picture_as_pdf_rounded))
+                                    ],
                                   ),
                                 ),
                               ],
@@ -139,7 +183,6 @@ class _viewproductState extends State<viewproduct> {
         ),
       ),
     );
-
   }
 
   Future<void> _downloadAndViewPDF(String pdfUrl) async {

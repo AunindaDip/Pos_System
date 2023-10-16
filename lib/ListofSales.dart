@@ -20,9 +20,9 @@ class _saleslistState extends State<saleslist> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sell List "),
+        title: const Text("Sell List "),
       ),
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Row(
           children: [
@@ -67,7 +67,7 @@ class _saleslistState extends State<saleslist> {
                                       Text(
                                         "Customer Name : " +
                                             sells[index]['CustomerName'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -75,7 +75,7 @@ class _saleslistState extends State<saleslist> {
                                       Text(
                                         "Sl No :" +
                                             sells[index]['Sales_Serial'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -89,7 +89,7 @@ class _saleslistState extends State<saleslist> {
                                       Text(
                                         "Total Ammount :" +
                                             sells[index]['After Discount'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -108,13 +108,13 @@ class _saleslistState extends State<saleslist> {
                                   Row(
                                     children: [
 
-                                      Text(
+                                      const Text(
                                         "Invoice",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       IconButton(
@@ -151,7 +151,7 @@ class _saleslistState extends State<saleslist> {
                                               filename: 'invoice.pdf',
                                             );
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                               color: Colors.green,
                                               Icons.picture_as_pdf))
                                     ],
@@ -163,7 +163,7 @@ class _saleslistState extends State<saleslist> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }

@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscureText: _isHidden,
                         controller: passwordController,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.password_rounded),
+                          prefixIcon: const Icon(Icons.password_rounded),
                           border: InputBorder.none,
                           hintText: "Password",
                           suffix: InkWell(
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 10,
                 ),
                 isLoading
-                    ? AbsorbPointer( // This widget will absorb pointer events when isLoading is true
+                    ? const AbsorbPointer( // This widget will absorb pointer events when isLoading is true
                   child: CircularProgressIndicator(),
                 )
                     : InkWell(
