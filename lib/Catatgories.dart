@@ -62,22 +62,28 @@ class _AddCategoryState extends State<AddCategory> {
           ),
           ElevatedButton(
             onPressed: () async {
+              if(categoryName.text.isEmpty){
+                showToast("Please enter Catagory Name ");
+              }
+              else{
 
-              catgorcontroller.setLoading(true);
+                catgorcontroller.setLoading(true);
 
-              await Future.delayed(Duration(seconds: 2));
+                await Future.delayed(Duration(seconds: 2));
 
 
 
-              dbref
-                  .ref()
-                  .child("Category")
-                  .push()
-                  .set({"Name": categoryName.text.toString()});
-              categoryName.clear();
+                dbref
+                    .ref()
+                    .child("Category")
+                    .push()
+                    .set({"Name": categoryName.text.toString()});
+                categoryName.clear();
 
-              catgorcontroller.setLoading(false);
-              showToast("Category added successfully!");
+                catgorcontroller.setLoading(false);
+                showToast("Category added successfully!");
+              }
+
 
 
 
