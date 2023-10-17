@@ -148,6 +148,7 @@ class _viewproductState extends State<viewproduct> {
                                         "Catalouge",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
+                                        fontSize: 17,
                                         color: Colors.deepOrange)
                                         ,
                                       ),
