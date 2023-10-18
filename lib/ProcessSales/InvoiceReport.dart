@@ -5,11 +5,14 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pos/Controller/addproduct.dart';
 import 'package:pos/Controller/cartcontroller.dart';
-import 'package:pos/ProcessSales/ProductListFor_Invoice.dart';
+import 'package:pos/HomePage.dart';
+import 'ProductListFor_Invoice.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 class invoicereport extends StatefulWidget {
   final String? customerName, customerPhone;
@@ -32,7 +35,6 @@ class _invoicereportState extends State<invoicereport> {
   final addproductcontroller Addproduct = Get.find<addproductcontroller>();
   final CartController cart = Get.find<CartController>();
   final dbref = FirebaseDatabase.instance;
-  int _invoiceNumber = 0; // Initialize with a default value
 
   int nextCounter = 1; // Initialize nextCounter
 
@@ -47,6 +49,21 @@ class _invoicereportState extends State<invoicereport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+
+            cart.clearCart();
+            Get.to(() => MyHomePage());
+
+            // Handle back button action here, e.g., navigating to the previous screen
+
+          },
+        ),
+
+
+
         centerTitle: true,
         title: const Text("Generate Sales"),
       ),
@@ -158,7 +175,7 @@ class _invoicereportState extends State<invoicereport> {
                   width: double.infinity,
                   child: TextButton(
                       onPressed: () {
-                        Get.to(() => const ProductListForInvoice(),
+                        Get.to(() =>  ProductListForInvoice(),
                             transition: Transition.leftToRight);
                       },
                       child: const Text(
@@ -552,10 +569,35 @@ class _invoicereportState extends State<invoicereport> {
               ),
             ),
             ElevatedButton(
-                onPressed: () {
-                  savetodatabase(nextCounter.toString());
-                },
-                child: const Text("Proceed Sell"))
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("Confirmation"),
+                      content: Text("Do you want to proceed with the sale?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          child: Text("No"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                            // Initiate the process with loading screen
+                            savetodatabase(nextCounter.toString());
+                          },
+                          child: Text("Yes"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Text("Sell & Generate Invoice "),
+            )
           ],
         ),
       ),
@@ -589,10 +631,25 @@ class _invoicereportState extends State<invoicereport> {
 
   Future<void> savetodatabase(String slnum) async {
 
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent dismissing the dialog
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(), // Loading indicator
+        );
+      },
+    );
+
+    await Future.delayed(Duration(seconds: 2)); // Introduce a 2-second delay
+
+
+
+
     try {
 
       DatabaseReference counterRef = dbref.ref().child("Sells_Counter ");
-      DatabaseEvent counterSnapshot = await counterRef.once();
 
       List<Map<String, dynamic>> productsData = [];
 
@@ -646,6 +703,7 @@ class _invoicereportState extends State<invoicereport> {
         "Sales_Serial": slnum,
         "Products": productsData,
         "CustomerName": Addproduct.CustomerName.value.toString(),
+
         "Subtotal": cart.totalAmount.toString(),
         "Discount": cart.discount.value,
         "DueAmount": cart.afterpaid.toString(),
@@ -655,6 +713,16 @@ class _invoicereportState extends State<invoicereport> {
       });
 
       await counterRef.set(nextCounter);
+
+
+      Navigator.of(context).pop();
+
+      // Show a toast
+      Fluttertoast.showToast(
+        msg: "Data saved successfully",
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.green,
+      );
 
 
 

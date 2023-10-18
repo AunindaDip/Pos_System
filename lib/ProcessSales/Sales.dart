@@ -48,73 +48,67 @@ class _salesState extends State<sales> {
                             customer = map.values.toList();
                           }
                           return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: customer.length,
-                              itemBuilder: (context, int index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                            shrinkWrap: true,
+                            itemCount: customer.length,
+                            itemBuilder: (context, int index) {
+                              return GestureDetector(
+                                onTap: (){
+                                  Addproduct.CustomerName=RxString(customer[index]["CustomerName"].toString());
+                                  Get.to(() =>  invoicereport(), transition: Transition.leftToRight);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
                                   child: Container(
                                     height: 80,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(10),
                                       color: Colors.white,
                                       boxShadow: const [
                                         BoxShadow(
                                           color: Colors.blueGrey,
-                                          offset: Offset(5.0, 5.0), //(x,y)
+                                          offset: Offset(5.0, 5.0),
                                           blurRadius: 8.0,
                                         ),
                                       ],
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    child: Row(
                                       children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(customer[index]["CustomerName"].toString(),
-                                                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                                                  ),
-                                                  Text(customer[index]["CustomerPhone"].toString(),
-                                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                                                  ),
-
-
-
-                                                ],
-                                              ),
+                                        // Left side of the container with image
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Image.asset(
+                                            'lib/assets/Images/default_image.jpg', // Replace with your image path
+                                            width: 60, // Adjust the width as needed
+                                            height: 60, // Adjust the height as needed
+                                          ),
+                                        ),
+                                        // Right side of the container with customer information
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  customer[index]["CustomerName"].toString(),
+                                                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                                                ),
+                                                SizedBox(height: 5,),
+                                                Text(
+                                                  customer[index]["CustomerPhone"].toString(),
+                                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.greenAccent),
+                                                ),
+                                              ],
                                             ),
-
-                                            // Display customer information on the left
-                                            // and an IconButton on the right
-                                            Expanded(
-                                              child: Container(
-                                                  // Your customer info here
-                                                  ),
-                                            ),
-                                            IconButton(
-                                              onPressed: ()
-                                              {
-                                                String name = customer[index]["CustomerName"].toString();
-                                                String phone =customer[index]["CustomerPhone"].toString();
-
-                                                Addproduct.CustomerName=RxString(customer[index]["CustomerName"].toString());
-                                                Get.to(() =>  invoicereport(), transition: Transition.leftToRight);
-                                              }, icon: const Icon(Icons.arrow_forward),
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                );
-                              });
+                                ),
+                              );
+                            },
+                          );
                         } else {
                           return Container();
                         }

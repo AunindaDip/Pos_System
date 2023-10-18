@@ -3,6 +3,7 @@ import 'package:pos/Addproduct.dart';
 import 'package:get/get.dart';
 import 'package:pos/Catatgories.dart';
 import 'package:pos/Customer/CreatCustomer.dart';
+import 'package:pos/CustomerList.dart';
 import 'package:pos/ListofSales.dart';
 import 'package:pos/Log-In.dart';
 import 'package:pos/ProcessSales/Sales.dart';
@@ -146,6 +147,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: const Color.fromRGBO(114, 146, 166, 1.0),
                     onTap: () {
                       Get.to(() =>  saleslist(),
+                          transition: Transition.leftToRight);
+
+                    },
+                  ),
+                  _buildCustomButton(
+                    image: "lib/assets/Images/add1.jpg",
+                    text: "CustomerList",
+                    color: const Color.fromRGBO(120, 100, 200, 1.0),
+                    onTap: () {
+                      Get.to(() =>  Customerlist(),
                           transition: Transition.leftToRight);
 
                     },

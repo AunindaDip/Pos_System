@@ -130,17 +130,18 @@ class _creatCustomerState extends State<creatCustomer> {
     );
   }
 
-  savetodatabase(
+  Future<void> savetodatabase(
       TextEditingController customername,
       TextEditingController customerEmail,
       TextEditingController customerAddress,
-      TextEditingController customerPhone) {
+      TextEditingController customerPhone,
+      ) async {
     try {
-      dbref.ref().child("Customer").push().set({
-        "CustomerName":customername.text.toString(),
-        "CustomerMail":customerEmail.text.toString(),
-        "CustomerPhone":customerPhone.text.toString(),
-        "CustomerAddress":customerAddress.text.toString(),
+      await dbref.reference().child("Customer").push().set({
+        "CustomerName": customername.text.toString(),
+        "CustomerMail": customerEmail.text.toString(),
+        "CustomerPhone": customerPhone.text.toString(),
+        "CustomerAddress": customerAddress.text.toString(),
       });
 
       customername.clear();
@@ -155,10 +156,13 @@ class _creatCustomerState extends State<creatCustomer> {
       );
 
       addcustomercontroller.addproductbool.value = false;
-    } on Exception catch (e) {
+
+      // Dismiss the loading screen
+      Navigator.of(context).pop();
+    } catch (e) {
       addcustomercontroller.addproductbool.value = false;
 
-
+      // Handle any exceptions if necessary
     }
   }
 }

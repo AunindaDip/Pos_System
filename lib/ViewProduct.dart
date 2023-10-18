@@ -7,7 +7,6 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pos/test.dart';
-import 'package:intl/intl.dart';
 
 class viewproduct extends StatefulWidget {
   const viewproduct({super.key});
@@ -48,10 +47,9 @@ class _viewproductState extends State<viewproduct> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                            height: 150,
+                            height: 120,
                             width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black87),
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: const [
                                 BoxShadow(
@@ -120,7 +118,7 @@ class _viewproductState extends State<viewproduct> {
                                             fontSize: 17,
                                             color: Colors.green),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
@@ -145,7 +143,7 @@ class _viewproductState extends State<viewproduct> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       const Text(
-                                        "Catalouge",
+                                        "Catalog",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                         fontSize: 17,
@@ -159,7 +157,7 @@ class _viewproductState extends State<viewproduct> {
                                                 .toString();
                                             await _downloadAndViewPDF(pdfUrl);
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                               color: Colors.deepOrange,
 
                                               Icons.picture_as_pdf_rounded))

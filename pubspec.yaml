@@ -102,6 +102,8 @@ flutter:
     - lib/assets/Images/Addcustomer.png
     - lib/assets/Images/Sales.png
     - lib/assets/Images/sign.png
+    - lib/assets/Images/default_image.jpg
+
 
 
 
