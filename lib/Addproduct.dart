@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:pos/Controller/addproduct.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:pos/HomePage.dart';
 import 'Modelclass/catagorymodel.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';

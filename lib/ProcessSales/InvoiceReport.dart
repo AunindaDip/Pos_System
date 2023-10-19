@@ -55,6 +55,9 @@ class _invoicereportState extends State<invoicereport> {
           onPressed: () {
 
             cart.clearCart();
+            cart.setDiscount(0.0); // Clear discount
+            cart.setPaidammount(0.0); // Clear paid amount
+            cart.setAfterPaid(0.00) ; // Clear due amount
             Get.to(() => MyHomePage());
 
             // Handle back button action here, e.g., navigating to the previous screen
