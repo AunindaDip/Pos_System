@@ -10,6 +10,8 @@ class CartController extends GetxController {
   RxDouble discount = RxDouble(0.0); // Initialize with no discount
   RxDouble Paidammount  = RxDouble(0.0); // Initialize with no discount
   RxInt get length => cartItems.length.obs;
+  RxDouble afterPaid = RxDouble(0.0); // Define afterPaid as an RxDouble
+
 
 
 
@@ -32,7 +34,6 @@ class CartController extends GetxController {
   void removeFromCart(Product product) {
 
     cartItems.remove(product);
-    print('Removing product: ${product.name}');
 
     update();
   }
@@ -46,6 +47,10 @@ class CartController extends GetxController {
   void setPaidammount(double value) {
     Paidammount.value = value;
   }
+  void setAfterPaid(double value) {
+    afterPaid.value = value;
+  }
+
 
 
   double get totalAmount {
@@ -64,6 +69,7 @@ class CartController extends GetxController {
 
     return afterdiscount - Paidammount.value; // Convert RxDouble to double// Subtract discount from the subtotal
   }
+
 
 
 
